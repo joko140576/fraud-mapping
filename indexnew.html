@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psychosocial Vulnerability · Asesmen</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #f2f6f4;
+      color: #17312a;
+      padding: 20px 16px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .app {
+      max-width: 820px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      padding: 28px 24px 20px;
+    }
+    .header {
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e4ede9;
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: #0e4d3c;
+      margin-bottom: 4px;
+    }
+    .header p {
+      font-size: 0.95rem;
+      color: #3b5b50;
+    }
+    .form-section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: #0e4d3c;
+      margin-bottom: 18px;
+    }
+    .section-title .badge {
+      background: #0e4d3c;
+      color: white;
+      border-radius: 30px;
+      padding: 0 14px;
+      font-size: 0.7rem;
+      line-height: 24px;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 20px;
+    }
+    @media (max-width: 520px) {
+      .row-2 { grid-template-columns: 1fr; }
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1f4036;
+      letter-spacing: 0.2px;
+    }
+    .field input,
+    .field select {
+      padding: 12px 14px;
+      border: 1px solid #d0dbd6;
+      border-radius: 14px;
+      background: #fafcfb;
+      font-size: 0.95rem;
+      transition: 0.15s;
+      width: 100%;
+    }
+    .field input:focus,
+    .field select:focus {
+      outline: 2px solid #0e4d3c;
+      outline-offset: 1px;
+      border-color: transparent;
+    }
+    .field input::placeholder {
+      color: #a5b9b0;
+      font-weight: 300;
+    }
+    .field select option:first-child {
+      color: #a5b9b0;
+    }
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 6px 0 18px;
+    }
+    @media (max-width: 520px) {
+      .btn-group { grid-template-columns: 1fr; }
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      border: 0;
+      border-radius: 40px;
+      background: #f4b400;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #17312a;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 4px 12px rgba(244, 180, 0, 0.2);
+    }
+    .btn-primary:hover {
+      background: #e0a500;
+      transform: scale(0.99);
+    }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-save {
+      background: #0e4d3c;
+      color: white;
+      box-shadow: 0 4px 12px rgba(14, 77, 60, 0.2);
+    }
+    .btn-save:hover {
+      background: #1b705b;
+    }
+    .btn-save:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .result-box {
+      background: #edf5f2;
+      padding: 18px 18px;
+      border-radius: 18px;
+      border-left: 6px solid #0e4d3c;
+      margin: 12px 0 10px;
+      min-height: 100px;
+    }
+    .result-box strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+    .result-box .meta {
+      font-size: 0.8rem;
+      color: #2b4d40;
+      background: #d8e7e0;
+      padding: 6px 14px;
+      border-radius: 40px;
+      display: inline-block;
+      margin-top: 8px;
+    }
+    .result-placeholder {
+      color: #6d7c77;
+      font-size: 0.9rem;
+    }
+    .note {
+      font-size: 0.75rem;
+      color: #6d7c77;
+      padding: 12px 0 4px;
+      border-top: 1px dashed #d0dbd6;
+      margin-top: 14px;
+    }
+    .note strong {
+      color: #17312a;
+    }
+    .quad-wrap {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      grid-template-rows: 1fr 32px;
+      min-height: 400px;
+      margin: 10px 0 4px;
+      background: #fafcfb;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .y-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #0e4d3c;
+      font-size: 0.7rem;
+      letter-spacing: 0.8px;
+      background: #edf5f2;
+      border-radius: 30px 0 0 30px;
+      margin-right: -2px;
+      padding: 8px 0;
+    }
+    .x-label {
+      grid-column: 2;
+      text-align: center;
+      font-weight: 800;
+      color: #0e4d3c;
+      font-size: 0.7rem;
+      letter-spacing: 0.8px;
+      padding-top: 8px;
+    }
+    .quadrant {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      border-left: 2px solid #52635d;
+      border-bottom: 2px solid #52635d;
+      background: #fafcfb;
+      border-radius: 0 0 0 14px;
+      overflow: hidden;
+    }
+    .q {
+      padding: 16px 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .q h3 {
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+      letter-spacing: -0.2px;
+    }
+    .q p {
+      font-size: 0.7rem;
+      line-height: 1.3;
+      max-width: 160px;
+      margin: 0;
+    }
+    .q1 { background: #e9f4ef; }
+    .q2 { background: #fff5d9; }
+    .q3 { background: #eef2f1; }
+    .q4 { background: #fde9e6; }
+    .center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid #0e4d3c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.6rem;
+      font-weight: 800;
+      z-index: 5;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      line-height: 1.2;
+      padding: 4px;
+    }
+    .marker {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #d83b30;
+      border: 3px solid white;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      transform: translate(-50%, -50%);
+      z-index: 6;
+      display: none;
+      transition: left 0.2s, top 0.2s;
+    }
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 14px 0 4px;
+      font-size: 0.7rem;
+      color: #2f4c41;
+    }
+    .dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 20px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .explain {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #e4ede9;
+    }
+    .mini {
+      background: #f8fbfa;
+      padding: 14px 12px;
+      border-radius: 16px;
+      border: 1px solid #dbe3df;
+      font-size: 0.75rem;
+    }
+    .mini b {
+      display: block;
+      margin-bottom: 4px;
+      color: #0e4d3c;
+    }
+    @media (max-width: 600px) {
+      .explain { grid-template-columns: 1fr; }
+      .app { padding: 20px 16px; }
+      .quad-wrap { min-height: 320px; }
+    }
+    .footer {
+      margin-top: 28px;
+      text-align: center;
+      color: #6d7c77;
+      font-size: 0.7rem;
+      padding: 8px 0;
+    }
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background: #0e4d3c;
+      color: white;
+      text-align: center;
+      border-radius: 40px;
+      padding: 14px 20px;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+    .toast.error {
+      background: #d83b30;
+    }
+    .required {
+      color: #d83b30;
+      font-size: 0.7rem;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <h1>Psychosocial Vulnerability · Asesmen</h1>
+    <p>Pemetaan kondisi psikososial sebagai indikator konteks — bukan prediksi perilaku fraud.</p>
+  </header>
+
+  <form id="form-asesmen" onsubmit="return false;">
+    <!-- Sesi 1: Biodata -->
+    <div class="form-section">
+      <div class="section-title"><span class="badge">1</span> Biodata Pegawai</div>
+      <div class="field-group">
+        <div class="row-2">
+          <div class="field">
+            <label>Nama Pegawai <span class="required">*</span></label>
+            <input type="text" id="nama" placeholder="Nama lengkap" value="">
+          </div>
+          <div class="field">
+            <label>NPP <span class="required">*</span></label>
+            <input type="text" id="npp" placeholder="Nomor Pokok Pegawai" value="">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>Region <span class="required">*</span></label>
+            <select id="region">
+              <option value="" disabled selected>Pilih Region</option>
+              <option value="1">Region 1</option>
+              <option value="2">Region 2</option>
+              <option value="3">Region 3</option>
+              <option value="4">Region 4</option>
+              <option value="5">Region 5</option>
+              <option value="6">Region 6</option>
+              <option value="7">Region 7</option>
+              <option value="8">Region 8</option>
+              <option value="9">Region 9</option>
+              <option value="10">Region 10</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Divisi <span class="required">*</span></label>
+            <select id="divisi">
+              <option value="" disabled selected>Pilih Divisi</option>
+              <option value="OPR1">OPR1</option>
+              <option value="OPR2">OPR2</option>
+              <option value="OPS">OPS</option>
+              <option value="FRM">FRM</option>
+              <option value="INA">INA</option>
+              <option value="PLM">PLM</option>
+              <option value="HCC">HCC</option>
+              <option value="MBS">MBS</option>
+              <option value="SBD">SBD</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>COU</label>
+            <input type="text" id="cou" placeholder="COU" value="">
+          </div>
+          <div class="field">
+            <label>Jabatan <span class="required">*</span></label>
+            <input type="text" id="jabatan" placeholder="Jabatan" value="">
+          </div>
+        </div>
+        <div class="field">
+          <label>Usia (tahun) → Age Factor <span class="required">*</span></label>
+          <input type="number" id="usia" placeholder="Masukkan usia" value="" min="18" max="70">
+        </div>
+      </div>
+    </div>
+
+    <!-- Sesi 2: Faktor Psikososial -->
+    <div class="form-section">
+      <div class="section-title"><span class="badge">2</span> Kondisi Psikososial <span style="font-weight:400; text-transform:none; color:#6d7c77; font-size:0.7rem;">(pilih salah satu)</span></div>
+      <div class="field-group">
+        <div class="field">
+          <label>Family Stability (FS) <span class="required">*</span></label>
+          <select id="fs">
+            <option value="" disabled selected>Pilih kondisi keluarga</option>
+            <option value="1">Keluarga harmonis</option>
+            <option value="2">Konflik keluarga</option>
+            <option value="3">Single parent</option>
+            <option value="4">Broken home</option>
+            <option value="5">Tinggal jauh dari keluarga</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Financial Pressure (FP) <span class="required">*</span></label>
+          <select id="fp">
+            <option value="" disabled selected>Pilih kondisi finansial</option>
+            <option value="1">Ekonomi sangat stabil</option>
+            <option value="2">Stabil</option>
+            <option value="3">Cukup</option>
+            <option value="4">Banyak kewajiban</option>
+            <option value="5">Hutang/tekanan finansial tinggi</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Social Attachment (SA) <span class="required">*</span></label>
+          <select id="sa">
+            <option value="" disabled selected>Pilih kondisi tempat tinggal</option>
+            <option value="1">Rumah bersama orang tua</option>
+            <option value="2">Rumah sendiri + keluarga</option>
+            <option value="3">Rumah saudara jauh dari ortu</option>
+            <option value="4">Kost sendiri</option>
+            <option value="5">Sering berpindah tempat tinggal</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Life Stability (LS) <span class="required">*</span></label>
+          <select id="ls">
+            <option value="" disabled selected>Pilih kondisi kehidupan</option>
+            <option value="1">Menikah + keluarga stabil</option>
+            <option value="2">Menikah + konflik keluarga</option>
+            <option value="3">Single + keluarga kuat</option>
+            <option value="4">Single + social support rendah</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="btn-group">
+    <button class="btn-primary" id="btnAnalyze" onclick="calculate()">Analisis Kuadran</button>
+    <button class="btn-primary btn-save" id="btnSave" onclick="saveToSpreadsheet()" disabled>
+      💾 Simpan ke Spreadsheet
+    </button>
+  </div>
+
+  <div class="result-box" id="result">
+    <strong style="color: #6d7c77;">Belum dianalisis</strong>
+    <div class="result-placeholder">Isi semua data dan klik tombol Analisis Kuadran.</div>
+    <div id="bio-preview" class="meta" style="display:none; margin-top:8px;"></div>
+  </div>
+
+  <div class="note">
+    <strong>Catatan:</strong> skor ini hanya menggambarkan kerentanan psikososial berdasarkan parameter yang Anda definisikan. Hasil tidak boleh digunakan untuk menyimpulkan seseorang sebagai pelaku atau calon pelaku fraud.
+  </div>
+
+  <!-- KUADRAN -->
+  <div style="margin-top: 28px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <span style="font-weight:700; font-size:0.9rem; color:#0e4d3c;">Quadrant Mapping</span>
+    </div>
+    <div class="quad-wrap">
+      <div class="y-label">SOCIAL / LIFE STABILITY →</div>
+      <div class="quadrant" id="quadrant">
+        <div class="q q1"><h3>Q1 — STABIL</h3><p>Tekanan rendah<br><b>Kerentanan rendah</b></p></div>
+        <div class="q q2"><h3>Q2 — PRESSURE</h3><p>Tekanan tinggi, support relatif kuat<br><b>Kerentanan moderat</b></p></div>
+        <div class="q q3"><h3>Q3 — SUPPORT LOW</h3><p>Support rendah, tekanan rendah<br><b>Kerentanan moderat</b></p></div>
+        <div class="q q4"><h3>Q4 — VULNERABLE</h3><p>Tekanan tinggi & support rendah<br><b>Kerentanan psikososial tinggi</b></p></div>
+        <div class="center">PSYCHOSOCIAL<br>VULNERABILITY</div>
+        <div class="marker" id="marker"></div>
+      </div>
+      <div class="x-label">FINANCIAL PRESSURE → Rendah &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tinggi</div>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:#e9f4ef"></i>Kerentanan rendah</span>
+      <span><i class="dot" style="background:#fff0bd"></i>Pressure dominan</span>
+      <span><i class="dot" style="background:#eef2f1"></i>Support rendah</span>
+      <span><i class="dot" style="background:#fde9e6"></i>Kerentanan tinggi</span>
+    </div>
+  </div>
+
+  <!-- penjelasan -->
+  <div class="explain">
+    <div class="mini"><b>Pressure</b>Terutama direpresentasikan oleh Financial Pressure (FP), dengan Family Stability (FS) sebagai konteks tekanan emosional/keluarga.</div>
+    <div class="mini"><b>Support & Stability</b>Social Attachment (SA) dan Life Stability (LS) dipakai untuk menggambarkan kekuatan dukungan dan stabilitas sosial.</div>
+    <div class="mini"><b>Fraud Risk</b>Untuk penilaian fraud, tambahkan variabel <i>Opportunity</i>, <i>Rationalization</i>, serta indikator kontrol internal. AF sebagai variabel kontrol.</div>
+  </div>
+
+  <footer class="footer">Psychosocial Vulnerability Mapping · HR Analytics Concept</footer>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+
+<script>
+  // ===== KONFIGURASI =====
+  // GANTI dengan URL Web App dari GAS Anda!
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycby3J4SefLBEFsNwJMobSDg352dOh2oodKC1XNX_73nClrS6_41JXf_DVNPP-Dhr-sl4/exec';
+  
+  // ===== VARIABEL GLOBAL =====
+  let lastResult = null;
+
+  // ===== FUNGSI UTAMA =====
+  function avg(a,b){ return (a+b)/2; }
+
+  function getAgeFactor(usia){
+    if (usia > 50) return 1;
+    if (usia >= 41) return 2;
+    if (usia >= 31) return 3;
+    if (usia >= 25) return 4;
+    return 5;
+  }
+
+  function validateForm() {
+    const fields = ['nama', 'npp', 'region', 'divisi', 'jabatan', 'usia'];
+    const selectFields = ['fs', 'fp', 'sa', 'ls'];
+    
+    // Check text inputs
+    for (let id of fields) {
+      const el = document.getElementById(id);
+      if (!el.value || el.value.trim() === '') {
+        showToast('Harap isi semua field biodata!', 'error');
+        return false;
+      }
+    }
+    
+    // Check select dropdowns
+    for (let id of selectFields) {
+      const el = document.getElementById(id);
+      if (!el.value || el.value === '') {
+        showToast('Harap pilih semua kondisi psikososial!', 'error');
+        return false;
+      }
+    }
+    
+    // Check usia is valid number
+    const usia = parseInt(document.getElementById('usia').value);
+    if (isNaN(usia) || usia < 18 || usia > 70) {
+      showToast('Usia harus antara 18-70 tahun!', 'error');
+      return false;
+    }
+    
+    return true;
+  }
+
+  function calculate() {
+    if (!validateForm()) {
+      return;
+    }
+
+    // biodata
+    const nama = document.getElementById('nama').value.trim();
+    const npp = document.getElementById('npp').value.trim();
+    const region = document.getElementById('region').value;
+    const divisi = document.getElementById('divisi').value;
+    const cou = document.getElementById('cou').value.trim() || '-';
+    const jabatan = document.getElementById('jabatan').value.trim();
+    const usia = parseInt(document.getElementById('usia').value);
+    const af = getAgeFactor(usia);
+
+    // psikososial
+    const fs = +document.getElementById('fs').value;
+    const fp = +document.getElementById('fp').value;
+    const sa = +document.getElementById('sa').value;
+    const ls = +document.getElementById('ls').value;
+
+    const pressure = avg(fp, fs);
+    const vulnerability = avg(sa, ls);
+
+    let q, title, desc, color;
+    if (pressure < 3 && vulnerability < 3) {
+      q = 'Q1'; title = 'Stabil & Tekanan Rendah'; 
+      desc = 'Kerentanan psikososial relatif rendah.';
+      color = '#e9f4ef';
+    } else if (pressure >= 3 && vulnerability < 3) {
+      q = 'Q2'; title = 'Tekanan Tinggi, Support Relatif Kuat'; 
+      desc = 'Perlu perhatian pada sumber tekanan.';
+      color = '#fff5d9';
+    } else if (pressure < 3 && vulnerability >= 3) {
+      q = 'Q3'; title = 'Support Rendah, Tekanan Rendah'; 
+      desc = 'Perlu perhatian pada dukungan sosial/stabilitas.';
+      color = '#eef2f1';
+    } else {
+      q = 'Q4'; title = 'Tekanan Tinggi & Support Rendah'; 
+      desc = 'Kerentanan psikososial relatif tinggi; perlu asesmen lanjutan.';
+      color = '#fde9e6';
+    }
+
+    // Simpan hasil untuk disimpan ke spreadsheet
+    lastResult = {
+      nama, npp, region, divisi, cou, jabatan, usia, ageFactor: af,
+      fs, fp, sa, ls,
+      pressure: Math.round(pressure * 10) / 10, 
+      vulnerability: Math.round(vulnerability * 10) / 10,
+      kuadran: q, title, description: desc
+    };
+
+    // result
+    const resultDiv = document.getElementById('result');
+    const bioPreview = `👤 ${nama} · NPP: ${npp} · Region: ${region} · Div: ${divisi} · COU: ${cou} · Jab: ${jabatan} · Usia: ${usia} th (AF=${af})`;
+    const bioPreviewEl = document.getElementById('bio-preview');
+    bioPreviewEl.innerHTML = bioPreview;
+    bioPreviewEl.style.display = 'inline-block';
+
+    resultDiv.innerHTML = `
+      <strong style="color: #0e4d3c;">${q} — ${title}</strong>
+      <div style="margin: 6px 0;">${desc}</div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.85rem; margin-top: 6px;">
+        <span style="background: ${color}; padding: 2px 12px; border-radius: 20px;">
+          Pressure: ${lastResult.pressure}
+        </span>
+        <span style="background: ${color}; padding: 2px 12px; border-radius: 20px;">
+          Vulnerability: ${lastResult.vulnerability}
+        </span>
+        <span style="background: ${color}; padding: 2px 12px; border-radius: 20px;">
+          AF: ${af}
+        </span>
+      </div>
+      <div class="meta" style="display:inline-block; margin-top:8px;">${bioPreview}</div>
+    `;
+
+    // marker
+    const marker = document.getElementById('marker');
+    const x = ((pressure - 1) / 4) * 100;
+    const y = ((vulnerability - 1) / 4) * 100;
+    marker.style.left = Math.max(0, Math.min(100, x)) + '%';
+    marker.style.top = Math.max(0, Math.min(100, y)) + '%';
+    marker.style.display = 'block';
+
+    // Enable save button
+    document.getElementById('btnSave').disabled = false;
+  }
+
+  // ===== SIMPAN KE SPREADSHEET =====
+  function saveToSpreadsheet() {
+    if (!lastResult) {
+      showToast('Silakan analisis terlebih dahulu!', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('btnSave');
+    btn.disabled = true;
+    btn.textContent = '⏳ Menyimpan...';
+
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(lastResult)
+    })
+    .then(() => {
+      showToast('✅ Data berhasil disimpan ke Spreadsheet!', 'success');
+      btn.textContent = '✅ Tersimpan!';
+      setTimeout(() => {
+        btn.textContent = '💾 Simpan ke Spreadsheet';
+        btn.disabled = false;
+      }, 3000);
+    })
+    .catch(error => {
+      showToast('❌ Gagal menyimpan: ' + error.message, 'error');
+      btn.textContent = '💾 Simpan ke Spreadsheet';
+      btn.disabled = false;
+    });
+  }
+
+  // ===== TOAST NOTIFICATION =====
+  function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast';
+    if (type === 'error') {
+      toast.classList.add('error');
+    }
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 4000);
+  }
+
+  // ===== INIT =====
+  // Semua field kosong, tidak ada default value
+  window.addEventListener('DOMContentLoaded', function() {
+    // Biarkan semua field kosong
+    // Marker tidak ditampilkan
+    document.getElementById('marker').style.display = 'none';
+  });
+</script>
+</body>
+</html>
