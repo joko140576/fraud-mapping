@@ -611,14 +611,10 @@
 <!-- Toast Notification -->
 <div id="toast" class="toast"></div>
 
-<!-- Iframe tersembunyi: target pengiriman data via form POST (bukan fetch),
-     supaya tidak kena batasan CORS/file:// saat FVI.html dibuka lokal -->
-<iframe name="hiddenUploadFrame" id="hiddenUploadFrame" style="display:none;"></iframe>
-
 <script>
   // ===== KONFIGURASI =====
   // GANTI dengan URL Web App dari GAS Anda!
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbyO0bV-UxPdOPL19hB5FhsX4G55dqbhoVw-GuYXPRmoJPSE5J702NhM3d24kwnVpubV/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbx0ipb917lOdY7FJsNtsKRIQRCJ1duwsyDwAuS2fvnsS0LzlirEYa-53r7iqosUQt2L/exec';
   
   // ===== VARIABEL GLOBAL =====
   let lastResult = null;
@@ -826,12 +822,21 @@
   }
 
   // ===== SIMPAN KE SPREADSHEET + GOOGLE DRIVE =====
-  // Catatan teknis: pengiriman TIDAK memakai fetch()/XHR, melainkan
-  // form POST ke iframe tersembunyi. Ini karena fetch() dari halaman
-  // yang dibuka via file:// (double-click) sering diblokir/tidak stabil
-  // di sebagian browser. Form POST ke iframe tidak kena batasan CORS
-  // maupun batasan origin file://, sehingga tetap jalan meski FVI.html
-  // dibuka langsung dari komputer tanpa web server.
+  // Catatan teknis: pengiriman memakai fetch() dengan mode:'no-cors' dan
+  // Content-Type: text/plain. Ini dipilih (bukan JSON) supaya request
+  // tetap dianggap "simple request" oleh browser, sehingga TIDAK memicu
+  // CORS preflight (OPTIONS) yang tidak didukung Apps Script. Karena
+  // mode:'no-cors', kita tidak bisa membaca respons server dari JS (ini
+  // memang dibatasi browser secara desain) — tapi request tetap terkirim
+  // dengan sukses.
+  //
+  // Teknik sebelumnya (form POST ke iframe tersembunyi) TIDAK dipakai lagi
+  // karena bisa gagal dengan error 403 di script.googleusercontent.com,
+  // yang terjadi ketika browser memblokir cookie pihak ketiga (third-party
+  // cookies) untuk domain Google saat konten Apps Script dirender di
+  // dalam iframe milik domain lain (mis. saat FVI.html di-hosting di
+  // Vercel). fetch() tidak merender apa pun ke browsing context, sehingga
+  // tidak terpengaruh pembatasan itu.
   async function saveToSpreadsheet() {
     if (!lastResult) {
       showToast('Silakan analisis terlebih dahulu!', 'error');
@@ -862,13 +867,13 @@
         videoFileName: lastVideoFile ? lastVideoFile.name : ''
       };
 
-      submitViaHiddenForm(GAS_URL, JSON.stringify(payload));
+      await sendToGAS(GAS_URL, payload);
 
-      // Karena target-nya iframe cross-origin, respons dari server TIDAK
-      // bisa dibaca oleh JavaScript (ini normal & memang dibatasi browser).
-      // Status "berhasil" di sini berarti data SUDAH TERKIRIM, bukan bukti
-      // final tersimpan — cek tab Executions di Apps Script atau langsung
-      // ke spreadsheet untuk konfirmasi akhir.
+      // Karena mode:'no-cors', respons dari server TIDAK bisa dibaca oleh
+      // JavaScript (ini normal & memang dibatasi browser). Status "berhasil"
+      // di sini berarti data SUDAH TERKIRIM, bukan bukti final tersimpan —
+      // cek tab "Data FVI" atau "Error Log" di spreadsheet untuk konfirmasi
+      // akhir.
       showToast('✅ Data & bukti telah dikirim ke Spreadsheet/Drive!', 'success');
       btn.textContent = '✅ Terkirim!';
       setTimeout(() => {
@@ -882,24 +887,19 @@
     }
   }
 
-  // Membuat <form> tersembunyi secara dinamis lalu men-submit-nya ke
-  // iframe tersembunyi. Payload dikirim sebagai satu field bernama "payload".
-  function submitViaHiddenForm(actionUrl, jsonString) {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = actionUrl;
-    form.target = 'hiddenUploadFrame';
-    form.style.display = 'none';
-
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'payload';
-    input.value = jsonString;
-    form.appendChild(input);
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+  // Kirim payload JSON mentah ke Apps Script via fetch, mode 'no-cors'.
+  // Content-Type text/plain (BUKAN application/json) supaya tetap
+  // dianggap "simple request" dan tidak memicu CORS preflight.
+  async function sendToGAS(actionUrl, payloadObj) {
+    await fetch(actionUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payloadObj)
+    });
+    // Tidak ada response.ok yang bisa dicek (opaque response, khas mode:'no-cors').
+    // Kalau fetch() sendiri throw (mis. tidak ada koneksi internet / URL salah),
+    // itu akan ditangkap oleh try/catch di saveToSpreadsheet().
   }
 
   // ===== TOAST NOTIFICATION =====
