@@ -434,7 +434,7 @@
             <label>Region <span class="required">*</span></label>
             <select id="region">
               <option value="" disabled selected>Pilih Region</option>
-              <option value="1">kantor Pusat</option>
+              <option value="PUSAT">Kantor Pusat</option>
               <option value="1">Region 1</option>
               <option value="2">Region 2</option>
               <option value="3">Region 3</option>
@@ -614,7 +614,7 @@
 <script>
   // ===== KONFIGURASI =====
   // GANTI dengan URL Web App dari GAS Anda!
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzcK1reXtjTBZww5MiKcOGt5DOjpd10TQGiCfsRFLh7qJ-LS31AlMY7B_dZc6WVQTLw/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbx-cP4HhyqxluBVKgO3yv0-Oe0X2csgQVLNGGGbBMxRkgqQL8x-Ir_-DEY5eCQcGmAC/exec';
   
   // ===== VARIABEL GLOBAL =====
   let lastResult = null;
@@ -822,21 +822,10 @@
   }
 
   // ===== SIMPAN KE SPREADSHEET + GOOGLE DRIVE =====
-  // Catatan teknis: pengiriman memakai fetch() dengan mode:'no-cors' dan
-  // Content-Type: text/plain. Ini dipilih (bukan JSON) supaya request
-  // tetap dianggap "simple request" oleh browser, sehingga TIDAK memicu
-  // CORS preflight (OPTIONS) yang tidak didukung Apps Script. Karena
-  // mode:'no-cors', kita tidak bisa membaca respons server dari JS (ini
-  // memang dibatasi browser secara desain) — tapi request tetap terkirim
-  // dengan sukses.
-  //
-  // Teknik sebelumnya (form POST ke iframe tersembunyi) TIDAK dipakai lagi
-  // karena bisa gagal dengan error 403 di script.googleusercontent.com,
-  // yang terjadi ketika browser memblokir cookie pihak ketiga (third-party
-  // cookies) untuk domain Google saat konten Apps Script dirender di
-  // dalam iframe milik domain lain (mis. saat FVI.html di-hosting di
-  // Vercel). fetch() tidak merender apa pun ke browsing context, sehingga
-  // tidak terpengaruh pembatasan itu.
+  // Apps Script Web App menerima JSON sebagai text/plain.
+  // mode:no-cors dipakai agar browser tidak melakukan CORS preflight.
+  // Respons server memang tidak dapat dibaca browser, tetapi request tetap dikirim.
+
   async function saveToSpreadsheet() {
     if (!lastResult) {
       showToast('Silakan analisis terlebih dahulu!', 'error');
@@ -844,69 +833,81 @@
     }
 
     const btn = document.getElementById('btnSave');
+    const imageFile = document.getElementById('buktiImage').files[0] || null;
+    const videoFile = document.getElementById('buktiVideo').files[0] || null;
+
+    // Validasi ulang sebelum upload.
+    if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+      showToast('Ukuran foto melebihi 5 MB!', 'error');
+      return;
+    }
+    if (videoFile && videoFile.size > 10 * 1024 * 1024) {
+      showToast('Ukuran video melebihi 10 MB!', 'error');
+      return;
+    }
+
+    // Perkiraan ukuran request. Base64 menambah sekitar 33%.
+    const estimatedMB =
+      ((imageFile ? imageFile.size : 0) +
+       (videoFile ? videoFile.size : 0)) * 1.34 / (1024 * 1024);
+
+    if (estimatedMB > 20) {
+      showToast('Total file terlalu besar untuk satu pengiriman. Kurangi ukuran foto/video.', 'error');
+      return;
+    }
+
     btn.disabled = true;
-    btn.textContent = '⏳ Mengunggah bukti...';
+    btn.textContent = '⏳ Membaca file...';
 
     try {
-      // Ambil file bukti LANGSUNG dari input di sini (bukan dari variabel
-      // yang di-set saat klik "Analisis"). Ini memperbaiki kasus di mana
-      // pengguna memilih/mengganti file foto & video SETELAH klik Analisis
-      // — sebelumnya file yang baru tidak pernah ikut terkirim.
-      const imageFile = document.getElementById('buktiImage').files[0] || null;
-      const videoFile = document.getElementById('buktiVideo').files[0] || null;
-
-      // Konversi file bukti ke base64 (dilakukan di sini, bukan saat Analisis,
-      // supaya tombol Analisis tetap ringan/cepat)
       const [imageBase64, videoBase64] = await Promise.all([
         fileToBase64(imageFile),
         fileToBase64(videoFile)
       ]);
 
-      btn.textContent = '⏳ Menyimpan...';
-
       const payload = {
         ...lastResult,
-        imageBase64: imageBase64,
+        imageBase64: imageBase64 || '',
         imageMimeType: imageFile ? imageFile.type : '',
         imageFileName: imageFile ? imageFile.name : '',
-        videoBase64: videoBase64,
+        videoBase64: videoBase64 || '',
         videoMimeType: videoFile ? videoFile.type : '',
-        videoFileName: videoFile ? videoFile.name : ''
+        videoFileName: videoFile ? videoFile.name : '',
+        clientTime: new Date().toISOString()
       };
+
+      btn.textContent = '⏳ Mengirim ke Spreadsheet & Drive...';
 
       await sendToGAS(GAS_URL, payload);
 
-      // Karena mode:'no-cors', respons dari server TIDAK bisa dibaca oleh
-      // JavaScript (ini normal & memang dibatasi browser). Status "berhasil"
-      // di sini berarti data SUDAH TERKIRIM, bukan bukti final tersimpan —
-      // cek tab "Data FVI" atau "Error Log" di spreadsheet untuk konfirmasi
-      // akhir.
-      showToast('✅ Data & bukti telah dikirim ke Spreadsheet/Drive!', 'success');
-      btn.textContent = '✅ Terkirim!';
+      showToast('✅ Data dikirim. Cek Spreadsheet "Data FVI" dan folder Drive.', 'success');
+      btn.textContent = '✅ Terkirim';
+
       setTimeout(() => {
         btn.textContent = '💾 Simpan ke Spreadsheet';
         btn.disabled = false;
       }, 3000);
+
     } catch (error) {
-      showToast('❌ Gagal menyimpan: ' + error.message, 'error');
+      console.error(error);
+      showToast('❌ Gagal mengirim: ' + error.message, 'error');
       btn.textContent = '💾 Simpan ke Spreadsheet';
       btn.disabled = false;
     }
   }
 
-  // Kirim payload JSON mentah ke Apps Script via fetch, mode 'no-cors'.
-  // Content-Type text/plain (BUKAN application/json) supaya tetap
-  // dianggap "simple request" dan tidak memicu CORS preflight.
   async function sendToGAS(actionUrl, payloadObj) {
-    await fetch(actionUrl, {
+    const response = await fetch(actionUrl, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
       body: JSON.stringify(payloadObj)
     });
-    // Tidak ada response.ok yang bisa dicek (opaque response, khas mode:'no-cors').
-    // Kalau fetch() sendiri throw (mis. tidak ada koneksi internet / URL salah),
-    // itu akan ditangkap oleh try/catch di saveToSpreadsheet().
+
+    // no-cors menghasilkan opaque response. Jangan gunakan response.json()/response.ok.
+    return response;
   }
 
   // ===== TOAST NOTIFICATION =====
