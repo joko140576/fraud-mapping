@@ -614,7 +614,7 @@
 <script>
   // ===== KONFIGURASI =====
   // GANTI dengan URL Web App dari GAS Anda!
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbx0ipb917lOdY7FJsNtsKRIQRCJ1duwsyDwAuS2fvnsS0LzlirEYa-53r7iqosUQt2L/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxrbTaqphZfq-LRs3NiuN-cQQsE9zUaXHBNZkGXpAMzoKVF76T8kanDZYupdm6o5Pac/exec';
   
   // ===== VARIABEL GLOBAL =====
   let lastResult = null;
@@ -848,11 +848,18 @@
     btn.textContent = '⏳ Mengunggah bukti...';
 
     try {
+      // Ambil file bukti LANGSUNG dari input di sini (bukan dari variabel
+      // yang di-set saat klik "Analisis"). Ini memperbaiki kasus di mana
+      // pengguna memilih/mengganti file foto & video SETELAH klik Analisis
+      // — sebelumnya file yang baru tidak pernah ikut terkirim.
+      const imageFile = document.getElementById('buktiImage').files[0] || null;
+      const videoFile = document.getElementById('buktiVideo').files[0] || null;
+
       // Konversi file bukti ke base64 (dilakukan di sini, bukan saat Analisis,
       // supaya tombol Analisis tetap ringan/cepat)
       const [imageBase64, videoBase64] = await Promise.all([
-        fileToBase64(lastImageFile),
-        fileToBase64(lastVideoFile)
+        fileToBase64(imageFile),
+        fileToBase64(videoFile)
       ]);
 
       btn.textContent = '⏳ Menyimpan...';
@@ -860,11 +867,11 @@
       const payload = {
         ...lastResult,
         imageBase64: imageBase64,
-        imageMimeType: lastImageFile ? lastImageFile.type : '',
-        imageFileName: lastImageFile ? lastImageFile.name : '',
+        imageMimeType: imageFile ? imageFile.type : '',
+        imageFileName: imageFile ? imageFile.name : '',
         videoBase64: videoBase64,
-        videoMimeType: lastVideoFile ? lastVideoFile.type : '',
-        videoFileName: lastVideoFile ? lastVideoFile.name : ''
+        videoMimeType: videoFile ? videoFile.type : '',
+        videoFileName: videoFile ? videoFile.name : ''
       };
 
       await sendToGAS(GAS_URL, payload);
