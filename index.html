@@ -2,246 +2,941 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Personal Fraud Vulnerability Mapping</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psychosocial Vulnerability · Asesmen</title>
   <style>
-    body{background:#f4f6f9;color:#263238}
-    .hero{background:linear-gradient(135deg,#173b57,#256b8f);color:white;border-radius:0 0 22px 22px}
-    .card{border:0;border-radius:16px;box-shadow:0 5px 18px rgba(0,0,0,.07)}
-    .section-title{font-weight:700;color:#173b57}
-    .step{display:none}.step.active{display:block}
-    .progress{height:9px}
-    .question-card{border-left:5px solid #256b8f}
-    .option{cursor:pointer}
-    .option input{margin-right:8px}
-    .risk-number{font-size:52px;font-weight:800}
-    .quadrant{position:relative;height:430px;background:white;border:1px solid #ddd;border-radius:16px;overflow:hidden}
-    .q{position:absolute;width:50%;height:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700}
-    .q1{right:0;top:0;background:#fde2e1}.q2{left:0;top:0;background:#fff1cf}
-    .q3{left:0;bottom:0;background:#dff3e4}.q4{right:0;bottom:0;background:#e3eefb}
-    .axis-x{position:absolute;left:0;right:0;top:50%;border-top:2px solid #555;z-index:2}
-    .axis-y{position:absolute;top:0;bottom:0;left:50%;border-left:2px solid #555;z-index:2}
-    .dot{position:absolute;width:25px;height:25px;border-radius:50%;background:#111;border:4px solid white;box-shadow:0 2px 8px #555;z-index:5;transform:translate(-50%,-50%)}
-    .legend span{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:5px}
-    .small-note{font-size:.86rem;color:#667}
-    @media print{.no-print{display:none!important}.card{box-shadow:none}.hero{color:#000;background:none}}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #f2f6f4;
+      color: #17312a;
+      padding: 20px 16px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .app {
+      max-width: 820px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      padding: 28px 24px 20px;
+    }
+    .header {
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e4ede9;
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: #0e4d3c;
+      margin-bottom: 4px;
+    }
+    .header p {
+      font-size: 0.95rem;
+      color: #3b5b50;
+    }
+    .form-section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: #0e4d3c;
+      margin-bottom: 18px;
+    }
+    .section-title .badge {
+      background: #0e4d3c;
+      color: white;
+      border-radius: 30px;
+      padding: 0 14px;
+      font-size: 0.7rem;
+      line-height: 24px;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 20px;
+    }
+    @media (max-width: 520px) {
+      .row-2 { grid-template-columns: 1fr; }
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1f4036;
+      letter-spacing: 0.2px;
+    }
+    .field input,
+    .field select {
+      padding: 12px 14px;
+      border: 1px solid #d0dbd6;
+      border-radius: 14px;
+      background: #fafcfb;
+      font-size: 0.95rem;
+      transition: 0.15s;
+      width: 100%;
+    }
+    .field input:focus,
+    .field select:focus {
+      outline: 2px solid #0e4d3c;
+      outline-offset: 1px;
+      border-color: transparent;
+    }
+    .field input::placeholder {
+      color: #a5b9b0;
+      font-weight: 300;
+    }
+    .field select option:first-child {
+      color: #a5b9b0;
+    }
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 6px 0 18px;
+    }
+    @media (max-width: 520px) {
+      .btn-group { grid-template-columns: 1fr; }
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      border: 0;
+      border-radius: 40px;
+      background: #f4b400;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #17312a;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 4px 12px rgba(244, 180, 0, 0.2);
+    }
+    .btn-primary:hover {
+      background: #e0a500;
+      transform: scale(0.99);
+    }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-save {
+      background: #0e4d3c;
+      color: white;
+      box-shadow: 0 4px 12px rgba(14, 77, 60, 0.2);
+    }
+    .btn-save:hover {
+      background: #1b705b;
+    }
+    .btn-save:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .result-box {
+      background: #edf5f2;
+      padding: 18px 18px;
+      border-radius: 18px;
+      border-left: 6px solid #0e4d3c;
+      margin: 12px 0 10px;
+      min-height: 100px;
+    }
+    .result-box strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+    .result-box .meta {
+      font-size: 0.8rem;
+      color: #2b4d40;
+      background: #d8e7e0;
+      padding: 6px 14px;
+      border-radius: 40px;
+      display: inline-block;
+      margin-top: 8px;
+    }
+    .result-placeholder {
+      color: #6d7c77;
+      font-size: 0.9rem;
+    }
+    .note {
+      font-size: 0.75rem;
+      color: #6d7c77;
+      padding: 12px 0 4px;
+      border-top: 1px dashed #d0dbd6;
+      margin-top: 14px;
+    }
+    .note strong {
+      color: #17312a;
+    }
+    .quad-wrap {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      grid-template-rows: 1fr 32px;
+      min-height: 400px;
+      margin: 10px 0 4px;
+      background: #fafcfb;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .y-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #0e4d3c;
+      font-size: 0.7rem;
+      letter-spacing: 0.8px;
+      background: #edf5f2;
+      border-radius: 30px 0 0 30px;
+      margin-right: -2px;
+      padding: 8px 0;
+    }
+    .x-label {
+      grid-column: 2;
+      text-align: center;
+      font-weight: 800;
+      color: #0e4d3c;
+      font-size: 0.7rem;
+      letter-spacing: 0.8px;
+      padding-top: 8px;
+    }
+    .quadrant {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      border-left: 2px solid #52635d;
+      border-bottom: 2px solid #52635d;
+      background: #fafcfb;
+      border-radius: 0 0 0 14px;
+      overflow: hidden;
+    }
+    .q {
+      padding: 16px 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .q h3 {
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+      letter-spacing: -0.2px;
+    }
+    .q p {
+      font-size: 0.7rem;
+      line-height: 1.3;
+      max-width: 160px;
+      margin: 0;
+    }
+    .q1 { background: #e9f4ef; }
+    .q2 { background: #fff5d9; }
+    .q3 { background: #eef2f1; }
+    .q4 { background: #fde9e6; }
+    .center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid #0e4d3c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.6rem;
+      font-weight: 800;
+      z-index: 5;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      line-height: 1.2;
+      padding: 4px;
+    }
+    .marker {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #d83b30;
+      border: 3px solid white;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      transform: translate(-50%, -50%);
+      z-index: 6;
+      display: none;
+      transition: left 0.2s, top 0.2s;
+    }
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 14px 0 4px;
+      font-size: 0.7rem;
+      color: #2f4c41;
+    }
+    .dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 20px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .explain {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #e4ede9;
+    }
+    .mini {
+      background: #f8fbfa;
+      padding: 14px 12px;
+      border-radius: 16px;
+      border: 1px solid #dbe3df;
+      font-size: 0.75rem;
+    }
+    .mini b {
+      display: block;
+      margin-bottom: 4px;
+      color: #0e4d3c;
+    }
+    @media (max-width: 600px) {
+      .explain { grid-template-columns: 1fr; }
+      .app { padding: 20px 16px; }
+      .quad-wrap { min-height: 320px; }
+    }
+    .footer {
+      margin-top: 28px;
+      text-align: center;
+      color: #6d7c77;
+      font-size: 0.7rem;
+      padding: 8px 0;
+    }
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background: #0e4d3c;
+      color: white;
+      text-align: center;
+      border-radius: 40px;
+      padding: 14px 20px;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+    .toast.error {
+      background: #d83b30;
+    }
+    .required {
+      color: #d83b30;
+      font-size: 0.7rem;
+      margin-left: 4px;
+    }
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 12px;
+      background: #fafcfb;
+      border: 1px solid #d0dbd6;
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+    @media (max-width: 520px) {
+      .checkbox-group { grid-template-columns: 1fr; }
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #1f4036;
+      cursor: pointer;
+    }
+    .checkbox-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #0e4d3c;
+      cursor: pointer;
+    }
+    .file-field input[type="file"] {
+      padding: 10px 12px;
+      border: 1px dashed #d0dbd6;
+      border-radius: 14px;
+      background: #fafcfb;
+      font-size: 0.8rem;
+      width: 100%;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-<header class="hero py-4 mb-4">
-  <div class="container">
-    <h2 class="fw-bold">Personal Fraud Vulnerability Mapping</h2>
-    <p class="mb-0">Screening profil personal & psikososial untuk analisis HR</p>
+<div class="app">
+  <header class="header">
+    <h1>Fraud Vulnerability Index </h1>
+    <p>Pemetaan kondisi psikososial sebagai indikator kontek prediksi perilaku fraud.</p>
+  </header>
+
+  <form id="form-asesmen" onsubmit="return false;">
+    <!-- Sesi 1: Biodata -->
+    <div class="form-section">
+      <div class="section-title"><span class="badge">1</span> Biodata Pegawai</div>
+      <div class="field-group">
+        <div class="row-2">
+          <div class="field">
+            <label>Nama Pegawai <span class="required">*</span></label>
+            <input type="text" id="nama" placeholder="Nama lengkap" value="">
+          </div>
+          <div class="field">
+            <label>NPP <span class="required">*</span></label>
+            <input type="text" id="npp" placeholder="Nomor Pokok Pegawai" value="">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>Region <span class="required">*</span></label>
+            <select id="region">
+              <option value="" disabled selected>Pilih Region</option>
+              <option value="1">kantor Pusat</option>
+              <option value="1">Region 1</option>
+              <option value="2">Region 2</option>
+              <option value="3">Region 3</option>
+              <option value="4">Region 4</option>
+              <option value="5">Region 5</option>
+              <option value="6">Region 6</option>
+              <option value="7">Region 7</option>
+              <option value="8">Region 8</option>
+              <option value="9">Region 9</option>
+              <option value="10">Region 10</option>
+
+            </select>
+          </div>
+          <div class="field">
+            <label>Divisi <span class="required">*</span></label>
+            <select id="divisi">
+              <option value="" disabled selected>Pilih Divisi</option>
+              <option value="OPR1">OPR1</option>
+              <option value="OPR2">OPR2</option>
+              <option value="OPS">OPS</option>
+              <option value="FRM">FRM</option>
+              <option value="INA">INA</option>
+              <option value="PLM">PLM</option>
+              <option value="HCC">HCC</option>
+              <option value="MBS">MBS</option>
+              <option value="SBD">SBD</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>COU / Kantor Pusat</label>
+            <input type="text" id="cou" placeholder="COU" value="">
+          </div>
+          <div class="field">
+            <label>Jabatan <span class="required">*</span></label>
+            <input type="text" id="jabatan" placeholder="Jabatan" value="">
+          </div>
+        </div>
+        <div class="field">
+          <label>Usia (tahun) → Age Factor <span class="required">*</span></label>
+          <input type="number" id="usia" placeholder="Masukkan usia" value="" min="18" max="70">
+        </div>
+      </div>
+    </div>
+
+    <!-- Sesi 2: Faktor Psikososial -->
+    <div class="form-section">
+      <div class="section-title"><span class="badge">2</span> Kondisi Psikososial <span style="font-weight:400; text-transform:none; color:#6d7c77; font-size:0.7rem;">(pilih salah satu)</span></div>
+      <div class="field-group">
+        <div class="field">
+          <label>Family Stability (FS) <span class="required">*</span></label>
+          <select id="fs">
+            <option value="" disabled selected>Pilih kondisi keluarga</option>
+            <option value="1">Keluarga harmonis</option>
+            <option value="2">Konflik keluarga</option>
+            <option value="3">Single parent</option>
+            <option value="4">Broken home</option>
+            <option value="5">Tinggal jauh dari keluarga</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Financial Pressure (FP) <span class="required">*</span></label>
+          <select id="fp">
+            <option value="" disabled selected>Pilih kondisi finansial</option>
+            <option value="1">Ekonomi sangat stabil</option>
+            <option value="2">Stabil</option>
+            <option value="3">Cukup</option>
+            <option value="4">Banyak kewajiban</option>
+            <option value="5">Hutang/tekanan finansial tinggi</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Social Attachment (SA) <span class="required">*</span></label>
+          <select id="sa">
+            <option value="" disabled selected>Pilih kondisi tempat tinggal</option>
+            <option value="1">Rumah bersama orang tua</option>
+            <option value="2">Rumah sendiri + keluarga</option>
+            <option value="3">Rumah saudara jauh dari ortu</option>
+            <option value="4">Kost sendiri</option>
+            <option value="5">Sering berpindah tempat tinggal</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Life Stability (LS) <span class="required">*</span></label>
+          <select id="ls">
+            <option value="" disabled selected>Pilih kondisi kehidupan</option>
+            <option value="1">Menikah + keluarga stabil</option>
+            <option value="2">Menikah + konflik keluarga</option>
+            <option value="3">Single + keluarga kuat</option>
+            <option value="4">Single + social support rendah</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Kepemilikan Aset <span style="font-weight:400; text-transform:none; color:#6d7c77; font-size:0.7rem;">(centang aset yang dimiliki — makin banyak aset, makin rendah kontribusi risiko)</span></label>
+          <div class="checkbox-group" id="asetGroup">
+            <label class="checkbox-item"><input type="checkbox" class="aset-check" value="Rumah"> Rumah</label>
+            <label class="checkbox-item"><input type="checkbox" class="aset-check" value="Mobil"> Mobil</label>
+            <label class="checkbox-item"><input type="checkbox" class="aset-check" value="Motor"> Motor</label>
+            <label class="checkbox-item"><input type="checkbox" class="aset-check" value="Deposito/Saving"> Deposito / Saving</label>
+            <label class="checkbox-item"><input type="checkbox" class="aset-check" value="Emas/Perhiasan"> Emas / Perhiasan</label>
+          </div>
+          <small id="asetInfo" style="color:#6d7c77; font-size:0.72rem; display:block; margin-top:2px;">0 aset dipilih · Asset Risk Factor (ARF): 5</small>
+        </div>
+        <div class="row-2">
+          <div class="field file-field">
+            <label>Upload Bukti Foto <span style="font-weight:400; color:#6d7c77; font-size:0.7rem;">(image, maks 5 MB)</span></label>
+            <input type="file" id="buktiImage" accept="image/*">
+            <small id="imageInfo" style="color:#6d7c77; font-size:0.72rem;"></small>
+          </div>
+          <div class="field file-field">
+            <label>Upload Bukti Video <span style="font-weight:400; color:#6d7c77; font-size:0.7rem;">(mp4, maks 10 MB)</span></label>
+            <input type="file" id="buktiVideo" accept="video/mp4">
+            <small id="videoInfo" style="color:#6d7c77; font-size:0.72rem;"></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="btn-group">
+    <button type="button" class="btn-primary" id="btnAnalyze" onclick="calculate()">Analisis Kuadran</button>
+    <button type="button" class="btn-primary btn-save" id="btnSave" onclick="saveToSpreadsheet()" disabled>
+      💾 Simpan ke Spreadsheet
+    </button>
   </div>
-</header>
 
-<main class="container pb-5">
-  <div class="card p-4 mb-4 no-print">
-    <div class="d-flex justify-content-between mb-2">
-      <span id="stepLabel">Tahap 1 dari 3 — Biodata</span><span id="pct">33%</span>
-    </div>
-    <div class="progress"><div id="bar" class="progress-bar" style="width:33%"></div></div>
+  <div class="result-box" id="result">
+    <strong style="color: #6d7c77;">Belum dianalisis</strong>
+    <div class="result-placeholder">Isi semua data dan klik tombol Analisis Kuadran.</div>
+    <div id="bio-preview" class="meta" style="display:none; margin-top:8px;"></div>
   </div>
 
-  <section id="step1" class="step active">
-    <div class="card p-4">
-      <h4 class="section-title">1. Identitas Pegawai</h4>
-      <p class="small-note">Data ini digunakan sebagai identitas laporan. Jangan gunakan hasil screening sebagai keputusan otomatis mengenai seseorang.</p>
-      <div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Nama Pegawai *</label><input id="nama" class="form-control" required></div>
-        <div class="col-md-6"><label class="form-label">NPP Pegawai *</label><input id="npp" class="form-control" required></div>
-        <div class="col-md-6"><label class="form-label">Jabatan *</label><input id="jabatan" class="form-control" required></div>
-        <div class="col-md-6"><label class="form-label">Unit/Kantor</label><input id="unit" class="form-control"></div>
-      </div>
-      <button class="btn btn-primary mt-4" onclick="next(2)">Lanjut ke Assessment →</button>
+  <div class="note">
+    <strong>Catatan:</strong> skor ini hanya menggambarkan kerentanan psikososial berdasarkan parameter yang Anda definisikan. Hasil tidak boleh digunakan untuk menyimpulkan seseorang sebagai pelaku atau calon pelaku fraud.
+  </div>
+
+  <!-- KUADRAN -->
+  <div style="margin-top: 28px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <span style="font-weight:700; font-size:0.9rem; color:#0e4d3c;">Quadrant Mapping</span>
     </div>
-  </section>
-
-  <section id="step2" class="step">
-    <div class="card p-4">
-      <h4 class="section-title">2. Personal & Psychological Vulnerability Assessment</h4>
-      <p class="small-note">Skor di bawah adalah <b>model screening/hipotesis</b>. Bobot harus divalidasi dengan data internal dan metode statistik sebelum dipakai untuk keputusan HR.</p>
-      <div id="questions"></div>
-      <div class="d-flex justify-content-between mt-4">
-        <button class="btn btn-outline-secondary" onclick="next(1)">← Kembali</button>
-        <button class="btn btn-primary" onclick="calculate()">Hitung Mapping →</button>
+    <div class="quad-wrap">
+      <div class="y-label">SOCIAL / LIFE STABILITY →</div>
+      <div class="quadrant" id="quadrant">
+        <div class="q q1"><h3>Q1 — STABIL</h3><p>Tekanan rendah<br><b>Kerentanan rendah</b></p></div>
+        <div class="q q2"><h3>Q2 — PRESSURE</h3><p>Tekanan tinggi, support relatif kuat<br><b>Kerentanan moderat</b></p></div>
+        <div class="q q3"><h3>Q3 — SUPPORT LOW</h3><p>Support rendah, tekanan rendah<br><b>Kerentanan moderat</b></p></div>
+        <div class="q q4"><h3>Q4 — VULNERABLE</h3><p>Tekanan tinggi & support rendah<br><b>Kerentanan psikososial tinggi</b></p></div>
+        <div class="center">PSYCHOSOCIAL<br>VULNERABILITY</div>
+        <div class="marker" id="marker"></div>
       </div>
+      <div class="x-label">FINANCIAL PRESSURE → Rendah &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tinggi</div>
     </div>
-  </section>
 
-  <section id="step3" class="step">
-    <div class="card p-4">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h4 class="section-title mb-1">3. Hasil Mapping</h4>
-          <div id="identity"></div>
-        </div>
-        <button class="btn btn-outline-dark no-print" onclick="window.print()">🖨 Cetak</button>
-      </div>
-
-      <hr>
-      <div class="row g-4">
-        <div class="col-lg-4">
-          <div class="card border p-4 text-center">
-            <div class="small text-muted">Personal Vulnerability Index</div>
-            <div id="score" class="risk-number">0</div>
-            <div id="category" class="badge fs-6">-</div>
-            <p id="interpretation" class="small-note mt-3 mb-0"></p>
-          </div>
-        </div>
-        <div class="col-lg-8">
-          <div class="card border p-3">
-            <h5 class="fw-bold">Kuadran Personal Vulnerability</h5>
-            <div class="quadrant" id="quad">
-              <div class="q q2">Q2<br>Social / Psychological<br>Vulnerability</div>
-              <div class="q q1">Q1<br>Critical Personal<br>Vulnerability</div>
-              <div class="q q3">Q3<br>Stable Personal<br>Profile</div>
-              <div class="q q4">Q4<br>Financial Pressure<br>Profile</div>
-              <div class="axis-x"></div><div class="axis-y"></div>
-              <div id="dot" class="dot" title="Posisi pegawai"></div>
-            </div>
-            <div class="d-flex justify-content-between small text-muted mt-2"><span>Personal Pressure rendah</span><span>Personal Pressure tinggi</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-4 mt-1">
-        <div class="col-lg-6">
-          <div class="card border p-4">
-            <h5 class="fw-bold">Rincian Dimensi</h5>
-            <div id="dimensions"></div>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="card border p-4">
-            <h5 class="fw-bold">Interpretasi HR</h5>
-            <div id="hrAction"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="alert alert-warning mt-4">
-        <b>Catatan metodologis:</b> hasil ini menunjukkan kerentanan personal/psikososial berdasarkan jawaban assessment,
-        bukan prediksi bahwa pegawai akan melakukan fraud. Jangan gunakan kategori ini sebagai satu-satunya dasar sanksi,
-        mutasi, promosi, atau tuduhan fraud.
-      </div>
-
-      <button class="btn btn-primary no-print" onclick="location.reload()">Assessment Baru</button>
+    <div class="legend">
+      <span><i class="dot" style="background:#e9f4ef"></i>Kerentanan rendah</span>
+      <span><i class="dot" style="background:#fff0bd"></i>Pressure dominan</span>
+      <span><i class="dot" style="background:#eef2f1"></i>Support rendah</span>
+      <span><i class="dot" style="background:#fde9e6"></i>Kerentanan tinggi</span>
     </div>
-  </section>
-</main>
+  </div>
+
+  <!-- penjelasan -->
+  <div class="explain">
+    <div class="mini"><b>Pressure</b>Terutama direpresentasikan oleh Financial Pressure (FP), dengan Family Stability (FS) sebagai konteks tekanan emosional/keluarga.</div>
+    <div class="mini"><b>Support & Stability</b>Social Attachment (SA) dan Life Stability (LS) dipakai untuk menggambarkan kekuatan dukungan dan stabilitas sosial.</div>
+    <div class="mini"><b>Fraud Risk</b>Untuk penilaian fraud, tambahkan variabel <i>Opportunity</i>, <i>Rationalization</i>, serta indikator kontrol internal. AF sebagai variabel kontrol usia; ARF (Asset Risk Factor) menurunkan kontribusi Financial Pressure seiring bertambahnya jumlah aset yang dimiliki pegawai.</div>
+  </div>
+
+  <footer class="footer">Psychosocial Vulnerability Mapping · HR Analytics Concept</footer>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+
+<!-- Iframe tersembunyi: target pengiriman data via form POST (bukan fetch),
+     supaya tidak kena batasan CORS/file:// saat FVI.html dibuka lokal -->
+<iframe name="hiddenUploadFrame" id="hiddenUploadFrame" style="display:none;"></iframe>
 
 <script>
-const questions = [
-  {id:"age",dim:"Life Stability",title:"Kelompok usia pegawai?",opts:[
-    ["< 25 tahun",4],["25–30 tahun",3],["31–40 tahun",2],["41–50 tahun",1],["> 50 tahun",1]]},
-  {id:"residence",dim:"Social Attachment",title:"Tempat tinggal saat ini?",opts:[
-    ["Bersama orang tua/keluarga inti",1],["Rumah sendiri bersama keluarga",1],["Rumah sendiri",2],["Kost bersama teman",3],["Kost sendiri",4]]},
-  {id:"family",dim:"Family Stability",title:"Bagaimana kondisi hubungan keluarga?",opts:[
-    ["Harmonis dan support kuat",1],["Relatif harmonis",2],["Ada konflik berkala",3],["Konflik keluarga berat",4],["Riwayat broken home/dukungan keluarga sangat rendah",5]]},
-  {id:"economy",dim:"Financial Pressure",title:"Bagaimana kondisi ekonomi pribadi/keluarga?",opts:[
-    ["Sangat terjamin",1],["Stabil",2],["Cukup/stabil tetapi ada kewajiban",3],["Banyak kewajiban/hutang",4],["Tekanan finansial sangat tinggi",5]]},
-  {id:"marital",dim:"Life Stability",title:"Status kehidupan keluarga?",opts:[
-    ["Menikah dan hubungan stabil",1],["Menikah, ada dinamika keluarga",2],["Belum menikah dengan support keluarga kuat",2],["Belum menikah dan support sosial rendah",4],["Situasi keluarga tidak stabil",5]]},
-  {id:"locality",dim:"Social Attachment",title:"Kondisi lokalitas/domisili?",opts:[
-    ["Lokal dan dekat keluarga",1],["Lokal tetapi tinggal mandiri",2],["Transmigran dengan support sosial kuat",2],["Transmigran dengan support sosial terbatas",4],["Transmigran dan sangat terisolasi",5]]},
-  {id:"dependents",dim:"Financial Pressure",title:"Beban tanggungan keluarga?",opts:[
-    ["Tidak ada",1],["1 orang",2],["2 orang",3],["3–4 orang",4],["> 4 orang",5]]},
-  {id:"mobility",dim:"Life Stability",title:"Stabilitas tempat tinggal 2 tahun terakhir?",opts:[
-    ["Sangat stabil",1],["Stabil",2],["Pernah pindah sekali",3],["Sering berpindah",4],["Sangat tidak stabil",5]]},
-  {id:"social",dim:"Social Attachment",title:"Seberapa kuat support system di luar pekerjaan?",opts:[
-    ["Sangat kuat",1],["Kuat",2],["Sedang",3],["Terbatas",4],["Sangat terbatas/isolasi sosial",5]]},
-  {id:"impulse",dim:"Risk Taking",title:"Dalam menghadapi masalah besar, kecenderungan pengambilan keputusan?",opts:[
-    ["Sangat hati-hati dan mempertimbangkan konsekuensi",1],["Cenderung hati-hati",2],["Seimbang",3],["Cenderung spontan",4],["Sering mengambil risiko tanpa mempertimbangkan konsekuensi",5]]}
-];
+  // ===== KONFIGURASI =====
+  // GANTI dengan URL Web App dari GAS Anda!
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxQw4EpbXdR3FrvUCUCNCtcdQZ9O6lfLvv5KTw3Y92icCvz7n7cMn-7X8RPIvwjCvM4/exec';
+  
+  // ===== VARIABEL GLOBAL =====
+  let lastResult = null;
+  let lastImageFile = null;
+  let lastVideoFile = null;
 
-const dimMax = {"Life Stability":15,"Social Attachment":15,"Family Stability":5,"Financial Pressure":10,"Risk Taking":5};
-let lastResult = null;
-
-function renderQuestions(){
-  const box=document.getElementById("questions");
-  box.innerHTML=questions.map((q,i)=>`
-    <div class="card question-card p-3 mb-3">
-      <div class="fw-bold mb-2">${i+1}. ${q.title}</div>
-      <div class="row">
-        ${q.opts.map((o,j)=>`
-          <div class="col-md-6 mb-2">
-            <label class="form-control option">
-              <input type="radio" name="${q.id}" value="${o[1]}"> ${o[0]}
-            </label>
-          </div>`).join("")}
-      </div>
-      <div class="small text-muted">Dimensi: ${q.dim}</div>
-    </div>`).join("");
-}
-renderQuestions();
-
-function next(n){
-  if(n===2 && (!document.getElementById("nama").value.trim() || !document.getElementById("npp").value.trim() || !document.getElementById("jabatan").value.trim())){
-    alert("Nama, NPP, dan Jabatan wajib diisi."); return;
+  // Konversi File -> base64 (tanpa prefix "data:...;base64,")
+  function fileToBase64(file){
+    return new Promise((resolve, reject) => {
+      if (!file) { resolve(null); return; }
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = () => reject(new Error('Gagal membaca file ' + file.name));
+      reader.readAsDataURL(file);
+    });
   }
-  document.querySelectorAll(".step").forEach(x=>x.classList.remove("active"));
-  document.getElementById("step"+n).classList.add("active");
-  const p=n===1?33:n===2?66:100;
-  document.getElementById("bar").style.width=p+"%";
-  document.getElementById("pct").textContent=p+"%";
-  document.getElementById("stepLabel").textContent=n===1?"Tahap 1 dari 3 — Biodata":n===2?"Tahap 2 dari 3 — Assessment":"Tahap 3 dari 3 — Hasil";
-}
 
-function calculate(){
-  const answers={}; let unanswered=[];
-  questions.forEach(q=>{
-    const el=document.querySelector(`input[name="${q.id}"]:checked`);
-    if(!el) unanswered.push(q.title); else answers[q.id]=Number(el.value);
+  // ===== FUNGSI UTAMA =====
+  function avg(a,b){ return (a+b)/2; }
+  function avg3(a,b,c){ return (a+b+c)/3; }
+
+  function getAgeFactor(usia){
+    if (usia > 50) return 1;
+    if (usia >= 41) return 2;
+    if (usia >= 31) return 3;
+    if (usia >= 25) return 4;
+    return 5;
+  }
+
+  // ===== ASET =====
+  // Semakin banyak aset yang dimiliki (rumah, mobil, motor, deposito/saving, emas/perhiasan),
+  // semakin kecil kontribusi risiko finansial (ARF menurun seiring jumlah aset bertambah).
+  const ASSET_MAX = 5; // jumlah maksimum jenis aset yang bisa dicentang
+  function getAssetCount(){
+    return document.querySelectorAll('.aset-check:checked').length;
+  }
+  function getAssetFactor(jumlahAset){
+    return Math.max(1, ASSET_MAX - jumlahAset);
+  }
+  function updateAsetInfo(){
+    const jumlah = getAssetCount();
+    const arf = getAssetFactor(jumlah);
+    const info = document.getElementById('asetInfo');
+    if (info) info.textContent = `${jumlah} aset dipilih · Asset Risk Factor (ARF): ${arf}`;
+  }
+
+  // ===== VALIDASI UKURAN FILE =====
+  function validateFileSize(inputId, infoId, maxMB){
+    const input = document.getElementById(inputId);
+    const info = document.getElementById(infoId);
+    const file = input.files[0];
+    if (!file) {
+      info.textContent = '';
+      return true;
+    }
+    const sizeMB = file.size / (1024 * 1024);
+    if (sizeMB > maxMB) {
+      info.textContent = `❌ "${file.name}" (${sizeMB.toFixed(2)} MB) melebihi batas ${maxMB} MB!`;
+      info.style.color = '#d83b30';
+      showToast(`Ukuran file melebihi batas ${maxMB} MB!`, 'error');
+      input.value = '';
+      return false;
+    }
+    info.textContent = `✅ ${file.name} (${sizeMB.toFixed(2)} MB)`;
+    info.style.color = '#0e4d3c';
+    return true;
+  }
+
+  function validateForm() {
+    const fields = ['nama', 'npp', 'region', 'divisi', 'jabatan', 'usia'];
+    const selectFields = ['fs', 'fp', 'sa', 'ls'];
+    
+    // Check text inputs
+    for (let id of fields) {
+      const el = document.getElementById(id);
+      if (!el.value || el.value.trim() === '') {
+        showToast('Harap isi semua field biodata!', 'error');
+        return false;
+      }
+    }
+    
+    // Check select dropdowns
+    for (let id of selectFields) {
+      const el = document.getElementById(id);
+      if (!el.value || el.value === '') {
+        showToast('Harap pilih semua kondisi psikososial!', 'error');
+        return false;
+      }
+    }
+    
+    // Check usia is valid number
+    const usia = parseInt(document.getElementById('usia').value);
+    if (isNaN(usia) || usia < 18 || usia > 70) {
+      showToast('Usia harus antara 18-70 tahun!', 'error');
+      return false;
+    }
+    
+    return true;
+  }
+
+  function calculate() {
+    if (!validateForm()) {
+      return;
+    }
+
+    // biodata
+    const nama = document.getElementById('nama').value.trim();
+    const npp = document.getElementById('npp').value.trim();
+    const region = document.getElementById('region').value;
+    const divisi = document.getElementById('divisi').value;
+    const cou = document.getElementById('cou').value.trim() || '-';
+    const jabatan = document.getElementById('jabatan').value.trim();
+    const usia = parseInt(document.getElementById('usia').value);
+    const af = getAgeFactor(usia);
+
+    // psikososial
+    const fs = +document.getElementById('fs').value;
+    const fp = +document.getElementById('fp').value;
+    const sa = +document.getElementById('sa').value;
+    const ls = +document.getElementById('ls').value;
+
+    // aset (checklist)
+    const asetList = Array.from(document.querySelectorAll('.aset-check:checked')).map(el => el.value);
+    const jumlahAset = asetList.length;
+    const arf = getAssetFactor(jumlahAset); // makin banyak aset, makin kecil ARF
+
+    // Financial Pressure kini dipengaruhi FP, FS, dan ARF (aset menurunkan tekanan finansial)
+    const pressure = avg3(fp, fs, arf);
+    const vulnerability = avg(sa, ls);
+
+    let q, title, desc, color;
+    if (pressure < 3 && vulnerability < 3) {
+      q = 'Q1'; title = 'Stabil & Tekanan Rendah'; 
+      desc = 'Kerentanan psikososial relatif rendah.';
+      color = '#e9f4ef';
+    } else if (pressure >= 3 && vulnerability < 3) {
+      q = 'Q2'; title = 'Tekanan Tinggi, Support Relatif Kuat'; 
+      desc = 'Perlu perhatian pada sumber tekanan.';
+      color = '#fff5d9';
+    } else if (pressure < 3 && vulnerability >= 3) {
+      q = 'Q3'; title = 'Support Rendah, Tekanan Rendah'; 
+      desc = 'Perlu perhatian pada dukungan sosial/stabilitas.';
+      color = '#eef2f1';
+    } else {
+      q = 'Q4'; title = 'Tekanan Tinggi & Support Rendah'; 
+      desc = 'Kerentanan psikososial relatif tinggi; perlu asesmen lanjutan.';
+      color = '#fde9e6';
+    }
+
+    // Bukti pendukung — simpan referensi File asli (dipakai saat upload ke Drive)
+    const imageFile = document.getElementById('buktiImage').files[0] || null;
+    const videoFile = document.getElementById('buktiVideo').files[0] || null;
+    lastImageFile = imageFile;
+    lastVideoFile = videoFile;
+
+    // Simpan hasil untuk disimpan ke spreadsheet
+    lastResult = {
+      nama, npp, region, divisi, cou, jabatan, usia, ageFactor: af,
+      fs, fp, sa, ls,
+      aset: asetList.join(', ') || '-', jumlahAset, arf,
+      pressure: Math.round(pressure * 10) / 10, 
+      vulnerability: Math.round(vulnerability * 10) / 10,
+      kuadran: q, title, description: desc,
+      buktiImageName: imageFile ? imageFile.name : '-',
+      buktiVideoName: videoFile ? videoFile.name : '-'
+    };
+
+    // result
+    const resultDiv = document.getElementById('result');
+    const bioPreview = `👤 ${nama} · NPP: ${npp} · Region: ${region} · Div: ${divisi} · COU: ${cou} · Jab: ${jabatan} · Usia: ${usia} th (AF=${af}) · Aset: ${jumlahAset} (ARF=${arf})`;
+    const bioPreviewEl = document.getElementById('bio-preview');
+    bioPreviewEl.innerHTML = bioPreview;
+    bioPreviewEl.style.display = 'inline-block';
+
+    resultDiv.innerHTML = `
+      <strong style="color: #0e4d3c;">${q} — ${title}</strong>
+      <div style="margin: 6px 0;">${desc}</div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.85rem; margin-top: 6px;">
+        <span style="background: ${color}; padding: 2px 12px; border-radius: 20px;">
+          Pressure: ${lastResult.pressure}
+        </span>
+        <span style="background: ${color}; padding: 2px 12px; border-radius: 20px;">
+          Vulnerability: ${lastResult.vulnerability}
+        </span>
+        <span style="background: ${color}; padding: 2px 12px; border-radius: 20px;">
+          AF: ${af}
+        </span>
+        <span style="background: ${color}; padding: 2px 12px; border-radius: 20px;">
+          Aset: ${jumlahAset} · ARF: ${arf}
+        </span>
+      </div>
+      <div class="meta" style="display:inline-block; margin-top:8px;">${bioPreview}</div>
+    `;
+
+    // marker
+    const marker = document.getElementById('marker');
+    const x = ((pressure - 1) / 4) * 100;
+    const y = ((vulnerability - 1) / 4) * 100;
+    marker.style.left = Math.max(0, Math.min(100, x)) + '%';
+    marker.style.top = Math.max(0, Math.min(100, y)) + '%';
+    marker.style.display = 'block';
+
+    // Enable save button
+    document.getElementById('btnSave').disabled = false;
+  }
+
+  // ===== SIMPAN KE SPREADSHEET + GOOGLE DRIVE =====
+  // Catatan teknis: pengiriman TIDAK memakai fetch()/XHR, melainkan
+  // form POST ke iframe tersembunyi. Ini karena fetch() dari halaman
+  // yang dibuka via file:// (double-click) sering diblokir/tidak stabil
+  // di sebagian browser. Form POST ke iframe tidak kena batasan CORS
+  // maupun batasan origin file://, sehingga tetap jalan meski FVI.html
+  // dibuka langsung dari komputer tanpa web server.
+  async function saveToSpreadsheet() {
+    if (!lastResult) {
+      showToast('Silakan analisis terlebih dahulu!', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('btnSave');
+    btn.disabled = true;
+    btn.textContent = '⏳ Mengunggah bukti...';
+
+    try {
+      // Konversi file bukti ke base64 (dilakukan di sini, bukan saat Analisis,
+      // supaya tombol Analisis tetap ringan/cepat)
+      const [imageBase64, videoBase64] = await Promise.all([
+        fileToBase64(lastImageFile),
+        fileToBase64(lastVideoFile)
+      ]);
+
+      btn.textContent = '⏳ Menyimpan...';
+
+      const payload = {
+        ...lastResult,
+        imageBase64: imageBase64,
+        imageMimeType: lastImageFile ? lastImageFile.type : '',
+        imageFileName: lastImageFile ? lastImageFile.name : '',
+        videoBase64: videoBase64,
+        videoMimeType: lastVideoFile ? lastVideoFile.type : '',
+        videoFileName: lastVideoFile ? lastVideoFile.name : ''
+      };
+
+      submitViaHiddenForm(GAS_URL, JSON.stringify(payload));
+
+      // Karena target-nya iframe cross-origin, respons dari server TIDAK
+      // bisa dibaca oleh JavaScript (ini normal & memang dibatasi browser).
+      // Status "berhasil" di sini berarti data SUDAH TERKIRIM, bukan bukti
+      // final tersimpan — cek tab Executions di Apps Script atau langsung
+      // ke spreadsheet untuk konfirmasi akhir.
+      showToast('✅ Data & bukti telah dikirim ke Spreadsheet/Drive!', 'success');
+      btn.textContent = '✅ Terkirim!';
+      setTimeout(() => {
+        btn.textContent = '💾 Simpan ke Spreadsheet';
+        btn.disabled = false;
+      }, 3000);
+    } catch (error) {
+      showToast('❌ Gagal menyimpan: ' + error.message, 'error');
+      btn.textContent = '💾 Simpan ke Spreadsheet';
+      btn.disabled = false;
+    }
+  }
+
+  // Membuat <form> tersembunyi secara dinamis lalu men-submit-nya ke
+  // iframe tersembunyi. Payload dikirim sebagai satu field bernama "payload".
+  function submitViaHiddenForm(actionUrl, jsonString) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = actionUrl;
+    form.target = 'hiddenUploadFrame';
+    form.style.display = 'none';
+
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'payload';
+    input.value = jsonString;
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+
+  // ===== TOAST NOTIFICATION =====
+  function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast';
+    if (type === 'error') {
+      toast.classList.add('error');
+    }
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 4000);
+  }
+
+  // ===== INIT =====
+  // Semua field kosong, tidak ada default value
+  window.addEventListener('DOMContentLoaded', function() {
+    // Biarkan semua field kosong
+    // Marker tidak ditampilkan
+    document.getElementById('marker').style.display = 'none';
+
+    // Update info Asset Risk Factor tiap kali checklist aset berubah
+    document.querySelectorAll('.aset-check').forEach(cb => {
+      cb.addEventListener('change', updateAsetInfo);
+    });
+    updateAsetInfo();
+
+    // Validasi ukuran file bukti (image maks 5MB, mp4 maks 10MB)
+    document.getElementById('buktiImage').addEventListener('change', function(){
+      validateFileSize('buktiImage', 'imageInfo', 5);
+    });
+    document.getElementById('buktiVideo').addEventListener('change', function(){
+      validateFileSize('buktiVideo', 'videoInfo', 10);
+    });
   });
-  if(unanswered.length){alert("Masih ada pertanyaan yang belum dijawab: "+unanswered.join("; "));return;}
-
-  const dims={};
-  questions.forEach(q=>dims[q.dim]=(dims[q.dim]||0)+answers[q.id]);
-  const maxTotal=65;
-  const total=Object.values(dims).reduce((a,b)=>a+b,0);
-  const score=Math.round((total/maxTotal)*100);
-  const pressure=Math.round(((dims["Financial Pressure"]||0)/(dimMax["Financial Pressure"]))*100);
-  const stabilityRaw=(dims["Life Stability"]||0)+(dims["Social Attachment"]||0)+(dims["Family Stability"]||0);
-  const stabilityMax=dimMax["Life Stability"]+dimMax["Social Attachment"]+dimMax["Family Stability"];
-  const vulnerability=Math.round((stabilityRaw/stabilityMax)*100);
-
-  let cat, desc, action;
-  if(score>=76){cat="HIGH";desc="Kerentanan personal/psikososial relatif tinggi.";action="Prioritaskan pendekatan HR: employee assistance, coaching, financial-wellness support, dan review berkala. Jangan menyimpulkan fraud tanpa bukti independen."}
-  else if(score>=51){cat="ELEVATED";desc="Terdapat kombinasi beberapa indikator tekanan atau ketidakstabilan.";action="Lakukan monitoring HR yang proporsional, komunikasi dengan atasan/HR, dan intervensi pada sumber tekanan yang teridentifikasi."}
-  else if(score>=26){cat="MODERATE";desc="Terdapat beberapa indikator yang perlu diperhatikan tetapi belum menunjukkan kerentanan tinggi.";action="Monitoring normal dan penguatan kesejahteraan/dukungan sosial bila diperlukan."}
-  else{cat="LOW";desc="Profil menunjukkan tingkat kerentanan personal relatif rendah.";action="Monitoring HR normal; tetap lakukan assessment secara berkala."}
-
-  let quadrant;
-  if(pressure>=50 && vulnerability>=50) quadrant="Q1 — Critical Personal Vulnerability";
-  else if(pressure<50 && vulnerability>=50) quadrant="Q2 — Social / Psychological Vulnerability";
-  else if(pressure<50 && vulnerability<50) quadrant="Q3 — Stable Personal Profile";
-  else quadrant="Q4 — Financial Pressure Profile";
-
-  document.getElementById("score").textContent=score;
-  document.getElementById("category").textContent=cat;
-  document.getElementById("category").className="badge fs-6 "+(cat==="HIGH"?"text-bg-danger":cat==="ELEVATED"?"text-bg-warning":cat==="MODERATE"?"text-bg-info":"text-bg-success");
-  document.getElementById("interpretation").textContent=desc;
-  document.getElementById("identity").innerHTML=`<b>${esc(nama.value)}</b> · NPP ${esc(npp.value)} · ${esc(jabatan.value)}${unit.value?" · "+esc(unit.value):""}`;
-
-  document.getElementById("dimensions").innerHTML=Object.entries(dims).map(([k,v])=>{
-    const max=dimMax[k]; const pct=Math.round(v/max*100);
-    return `<div class="mb-3"><div class="d-flex justify-content-between"><span>${k}</span><b>${pct}%</b></div><div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div></div>`;
-  }).join("");
-
-  document.getElementById("hrAction").innerHTML=`<p><b>${quadrant}</b></p><p>${action}</p><ul class="small"><li>Gunakan hasil sebagai screening, bukan vonis.</li><li>Validasi dengan indikator perilaku/organisasi yang objektif.</li><li>Jaga kerahasiaan data personal dan batasi akses HR.</li></ul>`;
-
-  // X = pressure, Y = vulnerability. Coordinates 5..95%.
-  const x=5+pressure*0.9, y=95-vulnerability*0.9;
-  const dot=document.getElementById("dot");
-  dot.style.left=x+"%"; dot.style.top=y+"%"; dot.title=quadrant;
-
-  lastResult={score,cat,quadrant,dims,pressure,vulnerability};
-  next(3);
-}
-
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 </script>
 </body>
 </html>
